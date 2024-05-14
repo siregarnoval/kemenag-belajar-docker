@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+  web:
+    build: . # Path to Dockerfile
+    ports:
+      - "3000-3003:3000" # Port mapping
+    volumes:
+      - ".env.prod:/go/src/app/.env" # Volume mapping
+    restart: always # Restart policy
+    deploy:
+      mode: replicated
+      replicas: 3
+      resources:
+        limits: # Resource limits
+          cpus: "0.1"
+          memory: 50M
+        reservations: # Resource reservations
+          cpus: "0.01"
+          memory: 20M
+    depends_on:
+      - db # Dependency on the db service
+    networks:
+      - api-network # Network
+
+  db:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Volume mapping
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+        reservations:
+          cpus: "0.01"
+          memory: 20M
+    environment: # Environment variables
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - api-network
+
+volumes:
+  postgres_data: # Volume
+
+networks:
+  api-network: # Network
+    name: api-network
+    driver: bridge

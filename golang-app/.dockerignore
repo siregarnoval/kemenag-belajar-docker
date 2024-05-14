@@ -1,0 +1,7 @@
+README.md
+Dockerfile
+.env
+.gitignore
+docker-compose*
+LICENSE
+.github
