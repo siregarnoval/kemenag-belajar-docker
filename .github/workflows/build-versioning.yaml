@@ -2,7 +2,7 @@ name: Build Docker Images with versioning
 on:
   push:
     tags:
-      - *-rc
+      - "*-rc"
 
 jobs:
   build:
